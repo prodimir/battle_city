@@ -117,6 +117,7 @@ int main(int argc, char** argv)
             return -1;
         }
 
+        resourceManager.loadTexture("DefaultTexture", "res/textures/map_16x16.png");
         ////call vertex_shader+compile
 
         //GLuint vs = glCreateShader(GL_VERTEX_SHADER);
