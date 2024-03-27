@@ -14,13 +14,16 @@ namespace Renderer {
 		{
 		case 4:
 			m_mode = GL_RGBA;
+			break;
 		case 3:
 			m_mode = GL_RGB;
+			break;
 		default:
 			m_mode = GL_RGBA;
 			break;
 		}
 		glGenTextures(1, &m_ID);							// сгенерируем ID дл€ текстуры
+		glActiveTexture(GL_TEXTURE0);						// подключаем текстуру в нулевой слот
 		glBindTexture(GL_TEXTURE_2D, m_ID);						// делаем текстуру m_ID текущей, то есть все изменени€(параметры, команды) примен€ютс€ дл€ неЄ(забиндеть)
 		glTexImage2D(GL_TEXTURE_2D, 0, m_mode, m_width, m_height, 0, m_mode, GL_UNSIGNED_BYTE, data); // второй параметр функции(level mipmaps) отвечает за сглаживание артефактов при удалении от текстуры. —в€зка с GL_TEXTURE_MAG_FILTER. ”ровень 0 - текстура с обычным размером, 1 - уменьшенна€ в 2 раза и т.д. ќптимизаци€ работы видеокарты
 

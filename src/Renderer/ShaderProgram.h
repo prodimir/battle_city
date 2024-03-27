@@ -9,6 +9,7 @@ namespace Renderer {
 		~ShaderProgram();
 		bool isCompiled() const {return m_isCompiled; }
 		void use() const;
+		void setInt(const std::string& name, const GLint value);	// идентификатор текстуры один шейдер, потому что uniform в fragment.txt
 
 		// prohibitions
 

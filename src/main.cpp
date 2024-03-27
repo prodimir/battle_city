@@ -4,6 +4,7 @@
 
 #include "Renderer/ShaderProgram.h" 
 #include "Resources/ResourceManager.h"
+#include "Renderer/Texture2D.h"
 
 
 /*Задаём vertex*/
@@ -17,6 +18,13 @@ GLfloat colors[] = {
     1.0f, 0.0f, 0.0f,
     0.0f, 1.0f, 0.0f,
     0.0f, 0.0f, 1.0f
+};
+
+// Координаты текстур для каждого вертекса. Две координаты
+GLfloat texCoord[] = {
+    0.5f, 1.0f, // верхняя точка треугольника
+    1.0f, 0.0f, // внизу справа
+    0.0f, 0.0f
 };
 
 const char* vertex_shader =
@@ -117,7 +125,7 @@ int main(int argc, char** argv)
             return -1;
         }
 
-        resourceManager.loadTexture("DefaultTexture", "res/textures/map_16x16.png");
+        auto tex = resourceManager.loadTexture("DefaultTexture", "res/textures/map_16x16.png");
         ////call vertex_shader+compile
 
         //GLuint vs = glCreateShader(GL_VERTEX_SHADER);
@@ -154,6 +162,12 @@ int main(int argc, char** argv)
         glBindBuffer(GL_ARRAY_BUFFER, colors_vbo);
         glBufferData(GL_ARRAY_BUFFER, sizeof(colors), colors, GL_STATIC_DRAW);
 
+        //for buffer texCoord
+        GLuint texCoord_vbo = 0;
+        glGenBuffers(1, &texCoord_vbo);
+        glBindBuffer(GL_ARRAY_BUFFER, texCoord_vbo);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(texCoord), texCoord, GL_STATIC_DRAW);
+
         // specify what video card has to do with transmitted data
 
         GLuint vao = 0;
@@ -168,8 +182,14 @@ int main(int argc, char** argv)
         glBindBuffer(GL_ARRAY_BUFFER, colors_vbo);
         glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
 
+        // for coordinates of textures 
+        glEnableVertexAttribArray(2);
+        glBindBuffer(GL_ARRAY_BUFFER, texCoord_vbo);
+        glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, nullptr);
 
-
+        // делаем шейдер активным, чтобы установить униформу
+        pDefaultShaderProgram->use();
+        pDefaultShaderProgram->setInt("tex", 0);
         /* Loop until the user closes the window - RENDERING */
         while (!glfwWindowShouldClose(pwindow))
         {
@@ -180,6 +200,7 @@ int main(int argc, char** argv)
 
             pDefaultShaderProgram->use();
             glBindVertexArray(vao);             // vao - vertex array objects
+            tex->bind();
             glDrawArrays(GL_TRIANGLES, 0, 3);
 
             /* Swap front and back buffers */

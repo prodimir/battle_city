@@ -81,6 +81,12 @@ namespace Renderer {
 	}
 	ShaderProgram::ShaderProgram(ShaderProgram&& shaderProgram) noexcept
 	{
+		m_ID = shaderProgram.m_ID = 0;
+		shaderProgram.m_isCompiled = false;
+	}
 
+	void ShaderProgram::setInt(const std::string& name, const GLint value)
+	{
+		glUniform1i(glGetUniformLocation(m_ID, name.c_str()), value);
 	}
 }
