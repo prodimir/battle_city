@@ -1,5 +1,6 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+#include <glm/vec2.hpp>
 #include <iostream>
 
 #include "Renderer/ShaderProgram.h" 
@@ -46,16 +47,16 @@ const char* fragment_shader =
 "}";
 
 
+glm::ivec2 g_windowSize(640, 480);
 
-
-int g_windowSizeX = 640;
-int g_windowSizeY = 480;
+//int g_windowSizeX = 640; // вместо этих переменных мы создали двухмерный вектор с помощью библиотеки glm
+//int g_windowSizeY = 480;
 
 void glfwWindowSizeCallback(GLFWwindow* pWindow, int width, int height)
 {
-    g_windowSizeX = width;
-    g_windowSizeY = height;
-    glViewport(0, 0, g_windowSizeX, g_windowSizeY); // точка, откуда начинаем рисовать и на какую площадь
+    g_windowSize.x = width;
+    g_windowSize.y = height;
+    glViewport(0, 0, g_windowSize.x, g_windowSize.y); // точка, откуда начинаем рисовать и на какую площадь
 }
 
 void glfwKeyCallback(GLFWwindow* pwindow, int key, int scancode, int action, int mode)
@@ -86,7 +87,7 @@ int main(int argc, char** argv)
     
 
     /* Create a windowed mode window and its OpenGL context */
-    GLFWwindow* pwindow = glfwCreateWindow(g_windowSizeX, g_windowSizeY, "Battle_City", NULL, NULL);
+    GLFWwindow* pwindow = glfwCreateWindow(g_windowSize.x, g_windowSize.y, "Battle_City", NULL, NULL);
     if (!pwindow)
     {
         std::cout << "GLFWWindow failed" << std::endl;
